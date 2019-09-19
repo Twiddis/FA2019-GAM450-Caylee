@@ -3,7 +3,6 @@
 
 namespace CayleeEngine
 {
-
 template <typename T>
 class Singleton
 {
