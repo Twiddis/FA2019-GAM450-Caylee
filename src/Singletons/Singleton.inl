@@ -7,7 +7,7 @@ template <typename T>
 template <typename ...Args>
 inline void Singleton<T>::Initialize(Args&& ...args)
 {
-  err::AssertWarn(!sInstance.get(), "WARNING: Attempted to an alreaedy instantiated singleton!");
+  //err::AssertWarn(!sInstance.get(), "WARNING: Attempted to an alreaedy instantiated singleton!");
 
   if (!sInstance)
     sInstance = std::make_unique<T>(args...);

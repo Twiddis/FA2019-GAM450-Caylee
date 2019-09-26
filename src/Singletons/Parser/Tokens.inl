@@ -12,7 +12,7 @@ TOKEN(Comment, "Comment")
 
 // Symbols
 TOKEN(_SymbolStart, "SymbolStart")
-TOKEN(Newline, "\n")
+TOKEN(Newline, 10)
 
 // Instruction names
 TOKEN(_KeywordStart, "KeywordStart")

@@ -70,7 +70,21 @@ namespace CayleeEngine
         AddEdge(comment_state, comment_state, c);
     }
 
+      // Symbols 
+    for (size_t i = TokenType::_SymbolStart + 1; i < TokenType::_KeywordStart; ++i)
+    {
+      State *symbol_state = AddState(static_cast<TokenType::Enum>(i));
+      AddEdge(mRootState, symbol_state, *Token::gTokenNames[i]);
+    }
 
+      // Initialize Keyword Map
+    for (size_t i = TokenType::_KeywordStart; i < TokenType::_End; ++i)
+    {
+      mKeywordMap.emplace(Token::gTokenNames[i], 
+                          Token(Token::gTokenNames[i], 
+                                std::strlen(Token::gTokenNames[i]), 
+                                static_cast<TokenType::Enum>(i)));
+    }
   }
 
   DFA::~DFA()
@@ -82,8 +96,54 @@ namespace CayleeEngine
   {
     while (*block != '\0')
     {
-      
+      const char *start = block;
+      const char *end = block;
+
+      const State *state = mRootState;
+      const State *last_accepted = state;
+
+      while (*block != '\0') {
+        auto pair = state->mEdges.find(*block);
+        
+          // Found Edge
+        if (pair != state->mEdges.end())
+          state = pair->second;
+
+          // If Default Edge Exists
+        else if (state->mDefaultEdge)
+          state = state->mDefaultEdge;
+
+          // No Edge
+        else break;
+
+          // Save if state is accepted
+        if (state->mAcceptingToken != TokenType::Invalid) {
+          last_accepted = state;
+          end = block;
+        }
+
+        ++block;
+      }
+
+        // No accepting state was found
+      if (last_accepted == mRootState)
+        return false;
+
+        // If name, it might be a keyword
+      if (last_accepted->mAcceptingToken == TokenType::RegisterName) {
+        auto keyword_pair = mKeywordMap.find(std::string(start, end - start));
+
+        if (keyword_pair != mKeywordMap.end()) {
+          token_stream.push_back(keyword_pair->second);
+        }
+      }
+
+        // Otherwise, just add to token stream
+      token_stream.push_back(Token(start, end - start + 1, last_accepted->mAcceptingToken));
+      block = end + 1;
     }
+
+    return true;
   }
 
   DFA::State* DFA::AddState(TokenType::Enum accepting_token)
@@ -92,6 +152,8 @@ namespace CayleeEngine
 
     new_state->mDefaultEdge = nullptr;
     new_state->mAcceptingToken = accepting_token;
+
+    return new_state;
   }
 
   void DFA::AddEdge(State *from, State *to, char c)
@@ -107,6 +169,16 @@ namespace CayleeEngine
   void DFA::AddDefaultEdge(State *from, State *to)
   {
     from->mDefaultEdge = to;
+  }
+
+  void DFA::DestroyNodes(State *)
+  {
+
+  }
+
+  Token DFA::TokenizeKeyword(const char *start, size_t length)
+  {
+    return mKeywordMap.find(std::string(start, length))->second;
   }
 
 }

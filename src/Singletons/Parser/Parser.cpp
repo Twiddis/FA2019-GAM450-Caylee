@@ -7,8 +7,8 @@ namespace CayleeEngine
   {
     
   }
-  bool Parser::Validate(const std::string &block)
+  bool Parser::Validate(const std::string &)
   {
-
-  }
+    return false;
+  } 
 }

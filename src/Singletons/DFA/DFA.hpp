@@ -31,7 +31,12 @@ private:
   void AddEdge(State *from, State *to, char c);
   void AddDefaultEdge(State *from, State *to);
 
+  void DestroyNodes(State *root);
+
+  Token TokenizeKeyword(const char *start, size_t length);
+
   State *mRootState;
+  std::unordered_map<std::string, Token> mKeywordMap;
 };
 
 }
