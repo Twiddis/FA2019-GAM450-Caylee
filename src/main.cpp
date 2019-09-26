@@ -20,6 +20,7 @@ int main(int , char* argv[])
   char *block = new char[len];
   file.read(block, len);
   file.close();
+  block[len - 1] = '\0';
 
   std::vector<Token> token_stream;
   DFA::GetInstance()->Tokenize(block, token_stream);

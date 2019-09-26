@@ -78,7 +78,7 @@ namespace CayleeEngine
     }
 
       // Initialize Keyword Map
-    for (size_t i = TokenType::_KeywordStart; i < TokenType::_End; ++i)
+    for (size_t i = TokenType::_KeywordStart + 1; i < TokenType::_End; ++i)
     {
       mKeywordMap.emplace(Token::gTokenNames[i], 
                           Token(Token::gTokenNames[i], 
