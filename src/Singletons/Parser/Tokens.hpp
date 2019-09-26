@@ -10,13 +10,8 @@ namespace CayleeEngine
       #define TOKEN(Type, Value) Type,
       #include "Tokens.inl"
       #undef TOKEN
+      _End
     };
-  }
-
-    // Array of actual tokens
-  namespace Tokens
-  {
-    const char *gTokenNames[];
   }
 
   class Token
@@ -38,6 +33,9 @@ namespace CayleeEngine
     const char *mText;
     size_t mTextLength;
     TokenType::Enum mTokenType;
+
+      // Array of token names
+    static const char *gTokenNames[];
   };
 
 }

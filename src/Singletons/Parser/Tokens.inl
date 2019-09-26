@@ -5,17 +5,17 @@
 TOKEN(Invalid, "InvalidToken")
 
 TOKEN(LabelName, "LabelName")
-TOKEN(RegisterName, "LabelName")
+TOKEN(RegisterName, "RegisterName")
 TOKEN(Literal, "Literal")
 TOKEN(Whitespace, "Whitespace")
+TOKEN(Comment, "Comment")
 
 // Symbols
-TOKEN(_SYMBOLS, "SymbolStart")
-TOKEN(Colon, ":")
-TOKEN(Hashtag, "#")
+TOKEN(_SymbolStart, "SymbolStart")
+TOKEN(Newline, "\n")
 
 // Instruction names
-TOKEN(_KEYWORDS, "KeywordStart")
+TOKEN(_KeywordStart, "KeywordStart")
 TOKEN(NoOperation, "NOP")
 TOKEN(Call, "CALL")
 TOKEN(Return, "RET")

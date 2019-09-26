@@ -20,12 +20,14 @@ class DFA : public Singleton<DFA>
 
 public:
   DFA();
-  bool Tokenize(const std::string &block);
+  ~DFA();
+
+  bool Tokenize(const char *block, std::vector<Token> &token_stream);
   
 private:
 
     // Helper functions to create the state machine
-  State *AddState(TokenType::Enum accepting_token);
+  State *AddState(TokenType::Enum accepting_token = TokenType::Invalid);
   void AddEdge(State *from, State *to, char c);
   void AddDefaultEdge(State *from, State *to);
 

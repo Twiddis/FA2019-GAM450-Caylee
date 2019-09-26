@@ -3,15 +3,13 @@
 
 namespace CayleeEngine
 {
-namespace Tokens
+const char* Token::gTokenNames[] =
 {
-  const char *gTokenNames[] =
-  {
-    #define TOKEN(Type, Value) #Value,
-    #include "Tokens.inl"
-    #undef TOKEN
-  };
-}
+  #define TOKEN(Type, Value) #Value,
+  #include "Tokens.inl"
+  #undef TOKEN
+};
+
 
 std::ostream& operator<<(std::ostream& out, const Token& token)
 {
