@@ -4,7 +4,7 @@
 
 namespace CayleeEngine
 {
-  VisitResult PrintVisitor::Visit(SyntaxNode * node)
+  VisitResult PrintVisitor::Visit(SyntaxNode * )
   {
     return Continue;
   }
@@ -14,7 +14,7 @@ namespace CayleeEngine
 
     return Continue;
   }
-  VisitResult PrintVisitor::Visit(StatementNode * node)
+  VisitResult PrintVisitor::Visit(StatementNode * )
   {
     return Continue;
   }
@@ -26,15 +26,18 @@ namespace CayleeEngine
   }
   VisitResult PrintVisitor::Visit(LiteralNode * node)
   {
-
+    std::cout << "LiteralNode (" << node->mValue << ") ";
     return Continue;
   }
   VisitResult PrintVisitor::Visit(RegisterReferenceNode * node)
   {
+    std::cout << "RegisterReferenceNode (" << node->mName.str() << ") ";
+
     return Continue;
   }
   VisitResult PrintVisitor::Visit(LabelReferenceNode * node)
   {
+    std::cout << "LabelReferenceNode (" << node->mName.str() << ") ";
     return Continue;
   }
 }

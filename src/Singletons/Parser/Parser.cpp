@@ -38,6 +38,12 @@ bool Parser::Parse(const std::vector<Token> &token_stream)
 // Helpers
 //////////////////////////////////////////////////////////////////////
 
+void Parser::Walk(Visitor * visitor)
+{
+  for (auto &instruction : mInstructions)
+    instruction->Walk(visitor, true);
+}
+
 bool Parser::Accept(TokenType::Enum token_type)
 {
   if (mCurrentToken->mTokenType == token_type) {

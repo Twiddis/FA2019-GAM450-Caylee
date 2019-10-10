@@ -2,6 +2,9 @@
 
 #include "Singletons/DFA/DFA.hpp"
 #include "Singletons/Parser/Parser.hpp"
+#include "Singletons/Interpreter/Interpreter.hpp"
+
+#include "Utility/Visitors/Visitor.hpp"
 
 using namespace CayleeEngine;
 int main(int argc, char* argv[])
@@ -12,6 +15,7 @@ int main(int argc, char* argv[])
 
   DFA::Initialize();
   Parser::Initialize();
+  Interpreter::Initialize();
 
   // TEMPORARY
   ///////////////////////////////////////
@@ -36,6 +40,12 @@ int main(int argc, char* argv[])
     std::cout << token << std::endl;
 
   delete[] block;
+
+  Parser::GetInstance()->Parse(token_stream);
+
+  PrintVisitor printer;
+  Parser::GetInstance()->Walk(&printer);
+
   system("pause");
   ////////////////////////////
 
