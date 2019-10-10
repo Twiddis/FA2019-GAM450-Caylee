@@ -71,15 +71,13 @@ namespace CayleeEngine
     }
 
       // Symbols 
-    for (size_t i = TokenType::_SymbolStart + 1; i < TokenType::_KeywordStart; ++i)
-    {
+    for (size_t i = TokenType::_SymbolStart + 1; i < TokenType::_KeywordStart; ++i) {
       State *symbol_state = AddState(static_cast<TokenType::Enum>(i));
       AddEdge(mRootState, symbol_state, *Token::gTokenNames[i]);
     }
 
       // Initialize Keyword Map
-    for (size_t i = TokenType::_KeywordStart + 1; i < TokenType::_End; ++i)
-    {
+    for (size_t i = TokenType::_KeywordStart + 1; i < TokenType::_End; ++i) {
       mKeywordMap.emplace(Token::gTokenNames[i], 
                           Token(Token::gTokenNames[i], 
                                 std::strlen(Token::gTokenNames[i]), 
@@ -131,15 +129,24 @@ namespace CayleeEngine
 
         // If name, it might be a keyword
       if (last_accepted->mAcceptingToken == TokenType::RegisterName) {
-        auto keyword_pair = mKeywordMap.find(std::string(start, end - start));
+        std::string find(start, end - start + 1);
+        auto keyword_pair = mKeywordMap.find(find);
 
-        if (keyword_pair != mKeywordMap.end()) {
+          // If it is, add the keyword token, otherwise, just add the token as a name
+        if (keyword_pair != mKeywordMap.end())
           token_stream.push_back(keyword_pair->second);
-        }
+        else
+          token_stream.push_back(Token(start, end - start + 1, last_accepted->mAcceptingToken));
       }
 
-        // Otherwise, just add to token stream
-      token_stream.push_back(Token(start, end - start + 1, last_accepted->mAcceptingToken));
+        // If it is a return carriage, get it the fuck outta here (dont do anything)
+      else if (last_accepted->mAcceptingToken == TokenType::ReturnCarriage)
+        (void) 0;
+
+        // If not a name, just add it as whatever it is.
+      else
+        token_stream.push_back(Token(start, end - start + 1, last_accepted->mAcceptingToken));
+
       block = end + 1;
     }
 

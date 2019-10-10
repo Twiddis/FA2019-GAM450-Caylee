@@ -17,4 +17,5 @@
 #include <random>
 #include <ctime>
 
+#include <Windows.h>
 #include "SDL/SDL.h"

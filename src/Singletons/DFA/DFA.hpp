@@ -1,8 +1,7 @@
 #pragma once
 #include "Singletons/Singleton.hpp"
 #include "DFA.hpp"
-
-#include "Singletons/Parser/Tokens.hpp"
+#include "Tokens.hpp"
 
 namespace CayleeEngine
 {
