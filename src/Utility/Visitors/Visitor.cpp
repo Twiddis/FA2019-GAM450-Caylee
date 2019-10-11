@@ -20,7 +20,7 @@ namespace CayleeEngine
   }
   VisitResult PrintVisitor::Visit(InstructionNode * node)
   {
-    std::cout << "InstructionNode (" << Token::gTokenNames[node->mKeyword] << ") ";
+    std::cout << "InstructionNode (" << Token::gTokenNames[node->mKeyword.mTokenType] << ") ";
 
     return Continue;
   }

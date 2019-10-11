@@ -17,7 +17,7 @@ TOKEN(Newline, \n)
 
 // Instruction names
 TOKEN(_KeywordStart, KeywordStart)
-TOKEN(NoOperation, NOP)
+TOKEN(NoOperation, NOP) 
 TOKEN(Call, CALL)
 TOKEN(Return, RET)
 TOKEN(Move, MOV)
@@ -28,3 +28,5 @@ TOKEN(Negate, NEG)
 TOKEN(JumpIfNegative, JNEG)
 TOKEN(JumppIfPositive, JPOS)
 TOKEN(JumpIfZero, JZERO)
+
+TOKEN(EndOfFile, EndOfFile)

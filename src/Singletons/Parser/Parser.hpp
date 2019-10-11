@@ -40,6 +40,7 @@ private:
   bool JumpIfPositive();
   bool JumpIfZero();
 
+  int mCurrentLine;
   std::vector<Token>::const_iterator mCurrentToken;
   std::vector<std::unique_ptr<SyntaxNode>> mInstructions;
   std::vector<std::runtime_error> mParsingErrors;

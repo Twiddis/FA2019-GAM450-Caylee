@@ -142,6 +142,9 @@ namespace CayleeEngine
         // If it is a return carriage, get it the fuck outta here (dont do anything)
       else if (last_accepted->mAcceptingToken == TokenType::ReturnCarriage)
         (void) 0;
+        // If it is a whitespace, get it the fuck outta here (dont do anything)
+      else if (last_accepted->mAcceptingToken == TokenType::Whitespace)
+        (void) 0;
 
         // If not a name, just add it as whatever it is.
       else
@@ -149,6 +152,9 @@ namespace CayleeEngine
 
       block = end + 1;
     }
+
+      // Special end of file token
+    token_stream.push_back(Token(block, 0, TokenType::EndOfFile));
 
     return true;
   }

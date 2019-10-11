@@ -39,13 +39,14 @@ int main(int argc, char* argv[])
   for (auto &token : token_stream)
     std::cout << token << std::endl;
 
-  delete[] block;
-
   Parser::GetInstance()->Parse(token_stream);
 
+  std::cout << std::endl;
+  std::cout << "Instructions: " << std::endl;
   PrintVisitor printer;
   Parser::GetInstance()->Walk(&printer);
-
+  
+  delete[] block;
   system("pause");
   ////////////////////////////
 

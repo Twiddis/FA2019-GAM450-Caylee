@@ -16,18 +16,26 @@ bool Parser::Parse(const std::vector<Token> &token_stream)
   mInstructions.clear();
   mParsingErrors.clear();
 
+  mCurrentLine = 0;
+
     // Keep parsing until the very end
-  while (mCurrentToken != token_stream.end()) 
+  while (mCurrentToken->mTokenType != TokenType::EndOfFile) 
   {
+
     try {
-      Expect(Instruction() || Label() || Comment() || TokenType::Newline);
+      Expect(Instruction() || Label() || Comment() || mCurrentToken->mTokenType == TokenType::Newline);
+      ++mCurrentLine;
       while (Accept(TokenType::Newline));
+
     }
       // If parsing error occured, make note and move to next instruction
+      // TODO: Have line info, error info in exception for
+      //       in-game debugging purposes
     catch (std::runtime_error err) {
+      std::cout << "Parsing error at line: " << mCurrentLine << std::endl;
       mParsingErrors.push_back(err);
 
-      while (std::prev(mCurrentToken)->mTokenType != TokenType::Newline)
+      while (mCurrentToken->mTokenType != TokenType::Newline)
         ++mCurrentToken;
     }
   }
@@ -40,8 +48,10 @@ bool Parser::Parse(const std::vector<Token> &token_stream)
 
 void Parser::Walk(Visitor * visitor)
 {
-  for (auto &instruction : mInstructions)
+  for (auto &instruction : mInstructions) {
     instruction->Walk(visitor, true);
+    std::cout << std::endl;
+  }
 }
 
 bool Parser::Accept(TokenType::Enum token_type)
@@ -81,13 +91,13 @@ bool Parser::Expect(bool expected)
 
 bool Parser::Label()
 {
-  return false;
+  return Accept(TokenType::LabelName);
 }
 //////////////////////////////////////////////////////////////////////
 
 bool Parser::Comment()
 {
-  return false;
+  return Accept(TokenType::Comment);
 }
 //////////////////////////////////////////////////////////////////////
 
@@ -108,13 +118,15 @@ bool Parser::Instruction()
 
 bool Parser::NoOperation()
 {
-  return Expect(TokenType::NoOperation);
+  return Accept(TokenType::NoOperation);
 }
 //////////////////////////////////////////////////////////////////////
 
 bool Parser::Move()
 {
-  Expect(TokenType::Move);
+  if (!Accept(TokenType::Move))
+    return false;
+
   Expect(TokenType::Literal);
   Expect(TokenType::RegisterName);
 
@@ -136,9 +148,13 @@ bool Parser::Move()
 
 bool Parser::Jump()
 {
-  Expect(TokenType::Jump);
-  Expect(TokenType::LabelName);
+  if (!Accept(TokenType::Jump))
+    return false;
 
+    // Label references are tokenized as register name
+    // TODO: Still works out, but may have to change later
+  Expect(TokenType::RegisterName);
+ 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
   std::unique_ptr<LabelReferenceNode> new_register = std::make_unique<LabelReferenceNode>();
 
@@ -154,7 +170,9 @@ bool Parser::Jump()
 
 bool Parser::Add()
 {
-  Expect(TokenType::Add);
+  if (!Accept(TokenType::Add))
+    return false;
+
   Expect(TokenType::Literal);
   
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
@@ -172,7 +190,9 @@ bool Parser::Add()
 
 bool Parser::Subtract()
 {
-  Expect(TokenType::Subtract);
+  if (!Accept(TokenType::Subtract))
+    return false;
+
   Expect(TokenType::Literal);
 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
@@ -190,7 +210,8 @@ bool Parser::Subtract()
 
 bool Parser::Negate()
 {
-  Expect(TokenType::Negate);
+  if (!Accept(TokenType::Negate))
+    return false;
 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
 
@@ -204,8 +225,12 @@ bool Parser::Negate()
 
 bool Parser::JumpIfNegative()
 {
-  Expect(TokenType::JumpIfNegative);
-  Expect(TokenType::LabelName);
+  if (!Accept(TokenType::JumpIfNegative))
+    return false;
+
+    // Label references are tokenized as register name
+    // TODO: Still works out, but may have to change later
+  Expect(TokenType::RegisterName);
 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
   std::unique_ptr<LabelReferenceNode> new_label = std::make_unique<LabelReferenceNode>();
@@ -222,8 +247,12 @@ bool Parser::JumpIfNegative()
 
 bool Parser::JumpIfPositive()
 {
-  Expect(TokenType::JumppIfPositive);
-  Expect(TokenType::LabelName);
+  if (!Accept(TokenType::JumppIfPositive))
+    return false;
+
+  // Label references are tokenized as register name
+  // TODO: Still works out, but may have to change later
+  Expect(TokenType::RegisterName);
 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
   std::unique_ptr<LabelReferenceNode> new_label = std::make_unique<LabelReferenceNode>();
@@ -240,8 +269,12 @@ bool Parser::JumpIfPositive()
 
 bool Parser::JumpIfZero()
 {
-  Expect(TokenType::JumpIfZero);
-  Expect(TokenType::LabelName);
+  if (!Accept(TokenType::JumpIfZero))
+    return false;
+
+    // Label references are tokenized as register name
+    // TODO: Still works out, but may have to change later
+  Expect(TokenType::RegisterName);
 
   std::unique_ptr<InstructionNode> new_instruction = std::make_unique<InstructionNode>();
   std::unique_ptr<LabelReferenceNode> new_label = std::make_unique<LabelReferenceNode>();

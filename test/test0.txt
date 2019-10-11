@@ -1,0 +1,3 @@
+# Test0
+MOV 12 ACC
+SUB 1
