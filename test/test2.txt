@@ -1,0 +1,11 @@
+potato:
+MOV 23 ACC
+ADD 2
+SUB 5
+MOV 359 ACC
+NEG
+JNEG labeeel
+JPOS potato
+labeeel:
+JZERO potato
+# Comment
