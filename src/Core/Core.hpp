@@ -1,5 +1,6 @@
 #pragma once
 #include "Systems/System.hpp"
+#include "Systems/Graphics/Graphics.hpp"
 
 namespace CayleeEngine
 {
@@ -12,6 +13,7 @@ public:
   template <typename T>
   inline void StartSystem();
 
+  void InitializeSystems();
   void Run();
   void Shutdown();
 

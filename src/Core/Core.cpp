@@ -3,24 +3,36 @@
 
 namespace CayleeEngine
 {
+  void Core::InitializeSystems()
+  {
+    StartSystem<Graphics>();
+  }
+
 void Core::Run()
 {
-  while (true)
-  {
-    float dt = 0.016f;
-    for (auto &sys : mSystems) {
-      if (sys->IsEnabled())
-        sys->StartFrame();
-    }
+  bool is_running = true;
+  while (is_running) {
+    SDL_Event event;
 
-    for (auto &sys : mSystems) {
-      if (sys->IsEnabled())
-        sys->Update(dt);
-    }
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT)
+        is_running = false;
 
-    for (auto &sys : mSystems) {
-      if (sys->IsEnabled())
-        sys->EndFrame();
+      float dt = 0.016f;
+      for (auto &sys : mSystems) {
+        if (sys->IsEnabled())
+          sys->StartFrame();
+      }
+
+      for (auto &sys : mSystems) {
+        if (sys->IsEnabled())
+          sys->Update(dt);
+      }
+
+      for (auto &sys : mSystems) {
+        if (sys->IsEnabled())
+          sys->EndFrame();
+      }
     }
   }
 }
