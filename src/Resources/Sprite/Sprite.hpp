@@ -11,8 +11,9 @@ public:
   ~Sprite();
 
   void LoadImageFromFile(const char *filepath);
+  constexpr SDL_Texture* GetTexture() { return mTexture; }
 
 private:
-  SDL_Surface *mSurface;
+  SDL_Texture *mTexture;
 };
 }

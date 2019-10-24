@@ -1,17 +1,13 @@
 #include "precompiled.hpp"
-
-
 #include "stb/stb_image.h"
-
 #include "Core/Core.hpp"
-
-
 
 using namespace CayleeEngine;
 int main(int , char* [])
 {
   AllocConsole();
   freopen("CONOUT$", "w", stdout);
+  SDL_LogSetAllPriority(SDL_LOG_PRIORITY_WARN);
 
   Core core;
 

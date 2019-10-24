@@ -1,40 +1,43 @@
 #include "precompiled.hpp"
 #include "Graphics.hpp"
 
+#include "Singletons/WindowRenderer/WindowRenderer.hpp"
+
+
 namespace CayleeEngine
 {
-Graphics::Graphics() : mWindow(nullptr), mRenderer(nullptr)
+Graphics::Graphics()
 {
+  WindowRenderer::Initialize();
 
-
-  if (SDL_Init(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0))
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, 
-                "Couldn't initialize SDL: %s", SDL_GetError());
-
-  if (SDL_CreateWindowAndRenderer(960, 540, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer))
-    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, 
-                "Couldn't create window and renderer: %s", SDL_GetError());
-
-
-
+  mTest = res::Sprite::Create("../res/Textures/Orange.jpg");
 }
+
 Graphics::~Graphics()
 {
-  SDL_DestroyRenderer(mRenderer);
-  SDL_DestroyWindow(mWindow);
+  WindowRenderer::Shutdown();
 }
 
 void Graphics::StartFrame()
 {
-  SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
-  SDL_RenderClear(mRenderer);
+  SDL_SetRenderDrawColor(WindowRenderer::GetInstance()->GetRenderer(), 0xFF, 0xFF, 0x00, 0xFF);
+  SDL_RenderClear(WindowRenderer::GetInstance()->GetRenderer());
 }
 
 void Graphics::Update(float )
 {
+  SDL_Rect rect;
+  rect.w = 100;
+  rect.h = 100;
+  rect.x = 100;
+  rect.y = 0;
+
+  SDL_RenderCopy(WindowRenderer::GetInstance()->GetRenderer(), mTest->GetTexture(), NULL, &rect);
+  
 }
 
 void Graphics::EndFrame()
 {
+  SDL_RenderPresent(WindowRenderer::GetInstance()->GetRenderer());
 }
 }

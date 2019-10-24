@@ -1,5 +1,5 @@
 #include "Systems/System.hpp"
-
+#include "Resources/Sprite/Sprite.hpp"
 namespace CayleeEngine
 {
 class Graphics : public System
@@ -13,8 +13,6 @@ public:
   void EndFrame();
 
 private:
-  SDL_Window *mWindow;
-  SDL_Renderer *mRenderer;
-
+  res::Sprite::Key mTest;
 };
 }

@@ -16,7 +16,8 @@ inline void Singleton<T>::Initialize(Args&& ...args)
 template <typename T>
 constexpr void Singleton<T>::Shutdown()
 {
-  err::AssertWarn(sInstance.get(), "WARNING: Attempted to an destroy an uninitialized singleton!");
+  if (!sInstance.get())
+    SDL_LogWarn(SDL_LOG_CATEGORY_SYSTEM, "WARNING: Attempted to an destroy an uninitialized singleton!");
 
   sInstance.reset();
 }
