@@ -35,7 +35,7 @@ bool Parser::Parse(const std::vector<Token> &token_stream)
       std::cout << "Parsing error at line: " << mCurrentLine << std::endl;
       mParsingErrors.push_back(err);
 
-      while (mCurrentToken->mTokenType != TokenType::Newline)
+      while (mCurrentToken->mTokenType != TokenType::Newline && mCurrentToken->mTokenType != TokenType::EndOfFile)
         ++mCurrentToken;
     }
   }
@@ -91,7 +91,15 @@ bool Parser::Expect(bool expected)
 
 bool Parser::Label()
 {
-  return Accept(TokenType::LabelName);
+  if (Accept(TokenType::LabelName)) {
+    std::unique_ptr<LabelNode> new_label = std::make_unique<LabelNode>();
+
+    new_label->mName = *(mCurrentToken - 1);
+    mInstructions.push_back(std::move(new_label));
+    return true;
+  }
+
+  return false;
 }
 //////////////////////////////////////////////////////////////////////
 

@@ -6,6 +6,7 @@
 
 #include "SyntaxNodes.hpp"
 
+
 namespace CayleeEngine
 {
 class Visitor;

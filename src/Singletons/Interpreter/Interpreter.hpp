@@ -1,10 +1,11 @@
 #pragma once
 #include "Singletons/Singleton.hpp"
-
+#include "Objects/Register/Register.hpp"
+#include "Utility/Visitors/Visitor.hpp"
 
 namespace CayleeEngine
 {
-struct SyntaxNode;
+typedef std::vector<std::unique_ptr<SyntaxNode>>::const_iterator instruction_ptr;
 
 class Interpreter : public Singleton<Interpreter>
 {
@@ -15,7 +16,9 @@ public:
   void SetInstructions(const std::vector<std::unique_ptr<SyntaxNode>>& instructions);
   void ExecuteNext();
 
-  typedef std::vector<std::unique_ptr<SyntaxNode>>::const_iterator instruction_ptr;
+
+
+  void AddRegister(std::string name, obj::Register *reg) { mRegisters.emplace(name, reg); }
 
 private:
 
@@ -23,9 +26,29 @@ private:
 
   instruction_ptr mCurrentInstruction;
   std::unordered_map<std::string, instruction_ptr> mValidLabels;
-  std::unordered_map<std::string, int> mRegisters;
+  std::unordered_map<std::string, obj::Register*> mRegisters;
+};
 
+class LabelFinder : public Visitor
+{
+public:
+  VisitResult Visit(LabelNode*             node) override;
 
+  instruction_ptr mCurrentInstruction;
+  std::unordered_map<std::string, instruction_ptr> mLabels;
+};
+
+class Executor : public Visitor
+{
+public:
+  VisitResult Visit(InstructionNode*             node) override;
+  VisitResult Visit(LabelNode*             node) override;
+
+  instruction_ptr mCurrentInstruction;
+  instruction_ptr mNextInstruction;
+
+  std::unordered_map<std::string, instruction_ptr> *mValidLabels;
+  std::unordered_map<std::string, obj::Register*> *mRegisters;
 };
 
 }

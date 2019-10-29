@@ -1,5 +1,4 @@
 #include "precompiled.hpp"
-#include "stb/stb_image.h"
 #include "Core/Core.hpp"
 
 using namespace CayleeEngine;

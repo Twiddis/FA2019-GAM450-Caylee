@@ -3,17 +3,17 @@
 
 namespace CayleeEngine
 {
-class LevelLoader : public System
+class Input : public System
 {
 public:
-  LevelLoader();
-  ~LevelLoader();
+  Input();
+  ~Input();
 
   void StartFrame();
   void Update(float dt);
   void EndFrame();
 
 private:
-  
+
 };
 }

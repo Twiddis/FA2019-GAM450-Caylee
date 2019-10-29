@@ -1,7 +1,8 @@
 #pragma once
 #include "Systems/System.hpp"
 #include "Systems/Graphics/Graphics.hpp"
-
+#include "Systems/Game/Game.hpp"
+#include "Systems/Input/Input.hpp"
 namespace CayleeEngine
 {
 class Core

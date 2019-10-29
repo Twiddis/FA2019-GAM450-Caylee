@@ -12,6 +12,8 @@ WindowRenderer::WindowRenderer() : mWindow(nullptr), mRenderer(nullptr)
   if (SDL_CreateWindowAndRenderer(960, 540, SDL_WINDOW_RESIZABLE, &mWindow, &mRenderer))
     SDL_LogError(SDL_LOG_CATEGORY_APPLICATION,
       "Couldn't create window and renderer: %s", SDL_GetError());
+
+  SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
 }
 
 WindowRenderer::~WindowRenderer()

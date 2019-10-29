@@ -5,34 +5,30 @@ namespace CayleeEngine
 {
   void Core::InitializeSystems()
   {
+    StartSystem<Input>();
     StartSystem<Graphics>();
+    StartSystem<Game>();
   }
 
 void Core::Run()
 {
   bool is_running = true;
   while (is_running) {
-    SDL_Event event;
+    float dt = 0.016f;
 
-    while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT)
-        is_running = false;
+    for (auto &sys : mSystems) {
+      if (sys->IsEnabled())
+        sys->StartFrame();
+    }
 
-      float dt = 0.016f;
-      for (auto &sys : mSystems) {
-        if (sys->IsEnabled())
-          sys->StartFrame();
-      }
+    for (auto &sys : mSystems) {
+      if (sys->IsEnabled())
+        sys->Update(dt);
+    }
 
-      for (auto &sys : mSystems) {
-        if (sys->IsEnabled())
-          sys->Update(dt);
-      }
-
-      for (auto &sys : mSystems) {
-        if (sys->IsEnabled())
-          sys->EndFrame();
-      }
+    for (auto &sys : mSystems) {
+      if (sys->IsEnabled())
+        sys->EndFrame();
     }
   }
 }

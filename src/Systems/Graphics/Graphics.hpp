@@ -1,5 +1,5 @@
 #include "Systems/System.hpp"
-#include "Resources/Sprite/Sprite.hpp"
+
 namespace CayleeEngine
 {
 class Graphics : public System
@@ -13,6 +13,8 @@ public:
   void EndFrame();
 
 private:
-  res::Sprite::Key mTest;
+  TTF_Font *mFont;
+  void DrawTextBoxes();
+  void DrawRegisters();
 };
 }

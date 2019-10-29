@@ -44,10 +44,30 @@ void Sprite::LoadImageFromFile(const char *filepath)
     return;
   }
 
+  int depth, pitch;
+  Uint32 pixel_format;
+  if (req_format == STBI_rgb) {
+    depth = 24;
+    pitch = 3 * width;
+    pixel_format = SDL_PIXELFORMAT_RGB24;
+  }
+  else { // STBI_rgb_alpha (RGBA)
+    depth = 32;
+    pitch = 4 * width;
+    pixel_format = SDL_PIXELFORMAT_RGBA32;
+  }
 
-  mTexture = SDL_CreateTexture(WindowRenderer::GetInstance()->GetRenderer(), 
-                               SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC,
-                               width, height);
+  SDL_Surface* surface = 
+    SDL_CreateRGBSurfaceWithFormatFrom(static_cast<void*>(data),
+                                       width, height, depth, pitch, pixel_format);
+  
+  if (!surface) {
+    SDL_LogWarn(SDL_LOG_CATEGORY_RENDER, "Creating surface failed: %s", SDL_GetError());
+    stbi_image_free(data);
+    return;
+  }
+
+  mTexture = SDL_CreateTextureFromSurface(WindowRenderer::GetInstance()->GetRenderer(), surface);
 
   if (!mTexture) {
     SDL_LogWarn(SDL_LOG_CATEGORY_RENDER,
@@ -55,5 +75,6 @@ void Sprite::LoadImageFromFile(const char *filepath)
   }
 
   stbi_image_free(data);
+  SDL_FreeSurface(surface);
 }
 }

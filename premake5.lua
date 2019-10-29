@@ -131,12 +131,16 @@ workspace "GAM450Project"
     links {
       "/SDL/%{cfg.platform}_%{cfg.buildcfg}/SDL2",
       "/SDL/%{cfg.platform}_%{cfg.buildcfg}/SDL2main",
-      "/SDL/%{cfg.platform}_%{cfg.buildcfg}/SDL2test"
+      "/SDL/%{cfg.platform}_%{cfg.buildcfg}/SDL2test",
+      "/SDL/%{cfg.platform}_%{cfg.buildcfg}/SDL2_ttf"
     }
 
     prebuildcommands {}
     postbuildcommands {
       "copy ..\\dep\\lib\\SDL\\%{cfg.platform}_%{cfg.buildcfg}\\SDL2.dll ..\\bin_%{cfg.platform}_%{cfg.buildcfg}\\",
+      "copy ..\\dep\\lib\\SDL\\%{cfg.platform}_%{cfg.buildcfg}\\SDL2_ttf.dll ..\\bin_%{cfg.platform}_%{cfg.buildcfg}\\",
+      "copy ..\\dep\\lib\\SDL\\%{cfg.platform}_%{cfg.buildcfg}\\libfreetype-6.dll ..\\bin_%{cfg.platform}_%{cfg.buildcfg}\\",
+      "copy ..\\dep\\lib\\SDL\\%{cfg.platform}_%{cfg.buildcfg}\\zlib1.dll ..\\bin_%{cfg.platform}_%{cfg.buildcfg}\\",
     }
 
     filter "platforms:x86"
